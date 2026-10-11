@@ -21,5 +21,4 @@ COPY --from=build /app/drizzle ./drizzle
 RUN mkdir -p /data && chown -R node:node /data /app
 USER node
 EXPOSE 3000
-VOLUME ["/data"]
 CMD ["node", "server/dist/index.js"]
