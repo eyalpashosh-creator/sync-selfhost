@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["vite/client", "react", "react-dom", "node"],
+    "rootDir": "..",
+    "tsBuildInfoFile": "./.tsbuildinfo"
+  },
+  "include": ["src/**/*", "../server/src/actions.ts", "../server/src/schema.ts", "../server/src/portable-sdk.ts"]
+}

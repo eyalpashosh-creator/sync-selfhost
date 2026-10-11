@@ -1,0 +1,15 @@
+services:
+  sync:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DATA_DIR: /data
+      PUBLIC_BASE_URL: http://localhost:3000
+    volumes:
+      - sync_data:/data
+    restart: unless-stopped
+
+volumes:
+  sync_data:

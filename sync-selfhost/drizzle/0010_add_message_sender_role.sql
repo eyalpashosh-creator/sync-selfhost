@@ -1,0 +1,1 @@
+ALTER TABLE `collaboration_messages` ADD `sender_role` text;

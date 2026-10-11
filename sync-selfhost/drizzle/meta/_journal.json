@@ -1,0 +1,167 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790483865533,
+      "tag": "0001_initial",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790483865533,
+      "tag": "0002_add_google_users_and_sessions",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790528545414,
+      "tag": "0003_add_campaigns",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1790530055818,
+      "tag": "0004_add_email_password_login",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1790531279027,
+      "tag": "0005_persist_notification_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1791004658907,
+      "tag": "0006_add_private_curator_invitations",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1791665583334,
+      "tag": "0007_split_artist_curator_roles_and_collaborations",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1791665832274,
+      "tag": "0008_remove_curator_niches",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1791668039619,
+      "tag": "0009_add_profiles_and_preferences",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1791668207921,
+      "tag": "0010_add_message_sender_role",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1791669506088,
+      "tag": "0011_add_mutual_resolve_requests",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1791671817132,
+      "tag": "0012_rename_campaign_invites_to_collaborations",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1791672224965,
+      "tag": "0013_allow_repeat_campaign_collaborations",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1791673053125,
+      "tag": "0014_mark_demo_curator_profiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1791674477532,
+      "tag": "0015_add_genre_and_mood_preferences",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1791677774331,
+      "tag": "0016_add_curator_invite_credits",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1791679601129,
+      "tag": "0017_add_deliverable_review_flow",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1791680270921,
+      "tag": "0018_consume_invite_credit_on_accept",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1791690835193,
+      "tag": "0019_chunked_draft_video_uploads",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "6",
+      "when": 1791694624937,
+      "tag": "0020_add_reports_blocks_and_resolve_timeline",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1791699948299,
+      "tag": "0021_add_report_email_relay_status",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1791700797541,
+      "tag": "0022_add_password_reset_tokens",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "6",
+      "when": 1791735296047,
+      "tag": "0023_scope_notifications_to_workspace_roles",
+      "breakpoints": true
+    }
+  ]
+}
