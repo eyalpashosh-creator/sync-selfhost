@@ -19,7 +19,6 @@ COPY --from=build /app/server/dist ./server/dist
 COPY --from=build /app/client/dist ./client/dist
 COPY --from=build /app/drizzle ./drizzle
 RUN mkdir -p /data && chown -R node:node /data /app
-USER node
 EXPOSE 3000
 CMD ["node", "server/dist/index.js"]
 
