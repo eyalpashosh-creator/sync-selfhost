@@ -1456,10 +1456,3 @@ body * {
 }
 
 @media (max-width: 760px){.notification-panel{position:fixed;left:12px;right:12px;top:max(68px,calc(env(safe-area-inset-top) + 56px));width:auto;max-height:72vh}.curator-notification-wrap{right:16px;top:18px}.report-dialog{padding:22px 18px}.report-dialog fieldset{grid-template-columns:1fr}.workspace-safety{padding-right:34px}.workspace-safety button{font-size:10px}.curator-reviews article div{flex-wrap:wrap}.dash-topbar .notification-center{margin-left:auto}.dash-topbar .dash-spacer{display:none}}
-
-/* Self-hosted alpha uses email/password authentication only. */
-.auth-divider,
-.google-button-host,
-.auth-card details {
-  display: none !important;
-}
