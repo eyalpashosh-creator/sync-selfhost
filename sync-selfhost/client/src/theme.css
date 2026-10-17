@@ -607,6 +607,8 @@ footer { border-top: 1px solid var(--border); }
 .campaign-picker-status.active { color: #a6b3bf; }
 .campaign-picker-status.available { color: var(--dash-accent); }
 .campaign-picker-empty { color: var(--dash-dim); font-size: .75rem; line-height: 1.45; }
+.campaign-picker-empty p { margin: 0; }
+.campaign-picker-campaigns-link { margin-top: 8px; padding: 0; border: 0; background: none; color: var(--dash-accent); font: inherit; font-weight: 800; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .campaign-picker .button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 .curator-inbox { display: grid; gap: 14px; margin-top: 40px; }
 .inbox-invite { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px; background: var(--dash-surface); border-block: 1px solid var(--dash-border); }
@@ -694,6 +696,13 @@ footer { border-top: 1px solid var(--border); }
 .multi-select-menu label, .single-select-menu button { width: 100%; min-height: 39px; padding: 0 9px; border: 0; border-radius: 8px; display: grid; grid-template-columns: minmax(0,1fr) 18px; align-items: center; text-align: left; cursor: pointer; background: transparent; color: var(--dash-soft); font-size: .78rem; font-weight: 700; }
 .multi-select-menu label:hover, .multi-select-menu label.selected, .single-select-menu button:hover, .single-select-menu button.selected { background: var(--dash-surface-2); color: var(--dash-text); }
 .multi-select-menu input { position: absolute; opacity: 0; pointer-events: none; }
+.multi-select-other { border-top: 1px solid var(--dash-border); margin-top: 6px; padding: 9px 9px 4px; display: grid; gap: 7px; }
+.multi-select-other > span { color: var(--dash-soft); font-size: .78rem; font-weight: 700; }
+.multi-select-other-row { display: flex; gap: 7px; }
+.multi-select-other-row input { position: static; opacity: 1; pointer-events: auto; flex: 1; min-width: 0; border: 1px solid var(--dash-border); border-radius: 8px; background: var(--dash-bg); color: var(--dash-text); padding: 8px 9px; font-size: .78rem; outline: none; }
+.multi-select-other-row input:focus { border-color: var(--dash-accent); }
+.multi-select-other-row button { flex: none; border: 1px solid var(--dash-accent); border-radius: 8px; background: transparent; color: var(--dash-accent); font-size: .75rem; font-weight: 800; padding: 8px 11px; cursor: pointer; }
+.multi-select-other-row button:disabled { opacity: .45; cursor: not-allowed; }
 .multi-select-menu label > span { margin: 0; color: inherit; font-size: inherit; }
 .multi-select-menu i, .single-select-menu i { opacity: 0; color: var(--dash-accent); font-style: normal; text-align: center; }
 .multi-select-menu label.selected i, .single-select-menu button.selected i { opacity: 1; }
@@ -724,6 +733,10 @@ footer { border-top: 1px solid var(--border); }
 .terms-line { color: var(--dash-soft); font-size: .82rem; margin-top: 15px; display: grid; gap: 4px; }
 .terms-line b { color: var(--dash-accent); font-size: .68rem; }
 .discovery-card > a { color: var(--dash-accent); font-weight: 800; font-size: .8rem; margin-top: 14px; }
+.social-links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 14px; }
+.social-links a { color: var(--dash-accent); font-weight: 800; font-size: .8rem; }
+.social-link-fields { display: grid; gap: 14px; }
+.social-link-fields h4 { margin: 4px 0 0; font-size: .95rem; }
 .discovery-card .invite-controls { margin-top: auto; padding-top: 22px; grid-template-columns: minmax(0,1fr) auto; }
 .artist-campaign { border-top: 1px solid var(--dash-border); }
 .artist-campaign:last-child { border-bottom: 1px solid var(--dash-border); }
@@ -750,6 +763,8 @@ footer { border-top: 1px solid var(--border); }
 .campaign-roster-head h4 { margin: 0; font-size: 1rem; }
 .campaign-roster-head p { color: var(--dash-dim); margin-top: 4px; font-size: .72rem; }
 .add-collaborator { min-height: 38px; padding: 0 13px; border: 1px solid var(--dash-accent); border-radius: 10px; background: transparent; color: var(--dash-accent); font-weight: 800; white-space: nowrap; }
+.campaign-roster-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.edit-campaign { min-height: 38px; padding: 0 13px; border: 1px solid var(--dash-border); border-radius: 10px; background: transparent; color: var(--dash-soft); font-weight: 800; white-space: nowrap; }
 .campaign-invite-stack { display: grid; align-content: center; }
 .campaign-invite-stack > .campaign-invite-row { min-height: 64px; border-top: 1px solid var(--dash-border); display: grid; grid-template-columns: 40px minmax(120px,1fr) auto minmax(140px, auto); align-items: center; gap: 12px; color: var(--dash-soft); font-size: .78rem; }
 .campaign-invite-stack > .campaign-invite-row:last-child { border-bottom: 1px solid var(--dash-border); }
