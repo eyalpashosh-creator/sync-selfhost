@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { blob, index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 export const users = sqliteTable("users", {
@@ -27,7 +28,7 @@ export const users = sqliteTable("users", {
   matchAlerts: integer("match_alerts", { mode: "boolean" }).notNull().default(true),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   lastSignInAt: integer("last_sign_in_at", { mode: "timestamp_ms" }).notNull(),
-});
+}, (table) => [uniqueIndex("users_username_lower_idx").on(sql`lower(${table.username})`)]);
 
 export const userSessions = sqliteTable("user_sessions", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -73,6 +74,9 @@ export const curatorProfiles = sqliteTable("curator_profiles", {
   platforms: text("platforms").notNull(), platformStats: text("platform_stats").notNull().default("[]"),
   followerCount: integer("follower_count").notNull().default(0),
   ratesTerms: text("rates_terms").notNull().default(""), portfolioLinks: text("portfolio_links").notNull().default("[]"),
+  tiktokUrl: text("tiktok_url").notNull().default(""),
+  instagramUrl: text("instagram_url").notNull().default(""),
+  youtubeUrl: text("youtube_url").notNull().default(""),
   acceptingInvites: integer("accepting_invites", { mode: "boolean" }).notNull().default(true),
   advertised: integer("advertised", { mode: "boolean" }).notNull().default(true),
   isDemo: integer("is_demo", { mode: "boolean" }).notNull().default(false),
