@@ -28,17 +28,83 @@ assert(curator.ok && curator.sessionToken, `curator sign-up failed: ${curator.er
 const signedIn = await action<{ ok: boolean; sessionToken?: string; error?: string }>("signInWithEmail", { email: artistEmail, password, role: "artist" });
 assert(signedIn.ok && signedIn.sessionToken, `artist sign-in failed: ${signedIn.error ?? "unknown"}`);
 
-const profile = await action<{ ok: boolean; profile?: { id: number }; error?: string }>("saveCuratorProfile", {
+const profile = await action<{ ok: boolean; profile?: { id: number; tiktokUrl?: string; instagramUrl?: string; youtubeUrl?: string; genres?: string[]; moods?: string[] }; error?: string }>("saveCuratorProfile", {
   sessionToken: curator.sessionToken,
   displayName: "Alpha Curator",
   bio: "Short-form music video curator.",
   platformStats: [{ platform: "TikTok", followers: 100 }],
   ratesTerms: "$100 per approved post",
-  portfolioLinks: [],
+  tiktokUrl: "https://www.tiktok.com/@alphacurator",
+  instagramUrl: "https://www.instagram.com/alphacurator",
+  youtubeUrl: "https://www.youtube.com/@alphacurator",
   acceptingInvites: true,
   advertised: true,
 });
 assert(profile.ok && profile.profile, `curator profile failed: ${profile.error ?? "unknown"}`);
+assert(profile.profile.tiktokUrl === "https://www.tiktok.com/@alphacurator", "TikTok URL did not round-trip");
+assert(profile.profile.instagramUrl === "https://www.instagram.com/alphacurator", "Instagram URL did not round-trip");
+assert(profile.profile.youtubeUrl === "https://www.youtube.com/@alphacurator", "YouTube URL did not round-trip");
+
+// Custom Genre/Mood ("Other") values save and are searchable in Discover.
+const prefs = await action<{ ok: boolean; error?: string }>("savePreferences", {
+  sessionToken: curator.sessionToken,
+  notifyInvites: true,
+  notifyMessages: true,
+  notifyDeliverables: true,
+  preferredPlatforms: ["TikTok"],
+  preferredGenres: ["ShoegazeZZ"],
+  preferredMoods: ["WistfulZZ"],
+  defaultTerms: "$100 per approved post",
+  turnaround: "",
+  discoverable: true,
+  available: true,
+});
+assert(prefs.ok, `savePreferences failed: ${prefs.error ?? "unknown"}`);
+const foundByCustomGenre = await action<{ ok: boolean; curators: Array<{ username: string; genres: string[]; moods: string[] }>; error?: string }>("listCurators", {
+  sessionToken: artist.sessionToken,
+  query: "ShoegazeZZ",
+});
+assert(foundByCustomGenre.ok && foundByCustomGenre.curators.some((c) => c.genres.includes("ShoegazeZZ") && c.moods.includes("WistfulZZ")), "custom genre/mood did not round-trip or is not searchable");
+
+// Discover visibility follows the advertise toggle: hidden when off, listed when on.
+const hiddenPrefs = await action<{ ok: boolean; error?: string }>("savePreferences", {
+  sessionToken: curator.sessionToken,
+  notifyInvites: true,
+  notifyMessages: true,
+  notifyDeliverables: true,
+  preferredPlatforms: ["TikTok"],
+  preferredGenres: ["ShoegazeZZ"],
+  preferredMoods: ["WistfulZZ"],
+  defaultTerms: "$100 per approved post",
+  turnaround: "",
+  discoverable: false,
+  available: true,
+});
+assert(hiddenPrefs.ok, `hiding profile failed: ${hiddenPrefs.error ?? "unknown"}`);
+const hiddenList = await action<{ ok: boolean; curators: Array<{ username: string }>; error?: string }>("listCurators", {
+  sessionToken: artist.sessionToken,
+  query: "ShoegazeZZ",
+});
+assert(hiddenList.ok && !hiddenList.curators.some((c) => c.genres.includes("ShoegazeZZ")), "curator with discoverable=false still appears in Discover");
+const visiblePrefs = await action<{ ok: boolean; error?: string }>("savePreferences", {
+  sessionToken: curator.sessionToken,
+  notifyInvites: true,
+  notifyMessages: true,
+  notifyDeliverables: true,
+  preferredPlatforms: ["TikTok"],
+  preferredGenres: ["ShoegazeZZ"],
+  preferredMoods: ["WistfulZZ"],
+  defaultTerms: "$100 per approved post",
+  turnaround: "",
+  discoverable: true,
+  available: true,
+});
+assert(visiblePrefs.ok, `re-listing profile failed: ${visiblePrefs.error ?? "unknown"}`);
+const visibleList = await action<{ ok: boolean; curators: Array<{ username: string }>; error?: string }>("listCurators", {
+  sessionToken: artist.sessionToken,
+  query: "ShoegazeZZ",
+});
+assert(visibleList.ok && visibleList.curators.some((c) => c.genres.includes("ShoegazeZZ")), "curator with discoverable=true missing from Discover");
 
 const campaign = await action<{ ok: boolean; campaign?: { id: number }; error?: string }>("createCampaign", {
   sessionToken: artist.sessionToken,
@@ -49,6 +115,30 @@ const campaign = await action<{ ok: boolean; campaign?: { id: number }; error?: 
   notes: "Smoke-test campaign",
 });
 assert(campaign.ok && campaign.campaign, `campaign creation failed: ${campaign.error ?? "unknown"}`);
+
+// Campaign editing: owner can update; another artist is rejected.
+const edited = await action<{ ok: boolean; campaign?: { id: number; title: string; genre: string; mood: string }; error?: string }>("updateCampaign", {
+  sessionToken: artist.sessionToken,
+  campaignId: campaign.campaign.id,
+  title: "Alpha smoke campaign (edited)",
+  genre: "ShoegazeZZ",
+  mood: "WistfulZZ",
+  platforms: ["TikTok"],
+  notes: "Smoke-test campaign, edited",
+});
+assert(edited.ok && edited.campaign?.title === "Alpha smoke campaign (edited)" && edited.campaign?.genre === "ShoegazeZZ", `campaign edit failed: ${edited.error ?? "unknown"}`);
+const otherArtist = await action<{ ok: boolean; sessionToken?: string; error?: string }>("createEmailAccount", { name: "Other Artist", email: `other-artist-${suffix}@example.test`, password, role: "artist" });
+assert(otherArtist.ok && otherArtist.sessionToken, `second artist sign-up failed: ${otherArtist.error ?? "unknown"}`);
+const forbiddenEdit = await action<{ ok: boolean; error?: string }>("updateCampaign", {
+  sessionToken: otherArtist.sessionToken,
+  campaignId: campaign.campaign.id,
+  title: "Hacked title",
+  genre: "Ambient",
+  mood: "Dreamy",
+  platforms: ["TikTok"],
+  notes: "",
+});
+assert(!forbiddenEdit.ok && forbiddenEdit.error === "That campaign isn't available.", `non-owner campaign edit was not rejected: ${JSON.stringify(forbiddenEdit)}`);
 
 const invite = await action<{ ok: boolean; invite?: { id: number }; error?: string }>("sendCampaignInvite", {
   sessionToken: artist.sessionToken,
@@ -64,4 +154,4 @@ const accepted = await action<{ ok: boolean; status?: string; error?: string }>(
 });
 assert(accepted.ok && accepted.status === "accepted", `invite acceptance failed: ${accepted.error ?? "unknown"}`);
 
-console.log(JSON.stringify({ ok: true, tested: ["sign-up", "sign-in", "create campaign", "send invite", "accept invite"] }, null, 2));
+console.log(JSON.stringify({ ok: true, tested: ["sign-up", "sign-in", "curator profile with social links", "custom genre/mood", "discover visibility toggle", "create campaign", "edit campaign", "non-owner edit rejected", "send invite", "accept invite"] }, null, 2));
