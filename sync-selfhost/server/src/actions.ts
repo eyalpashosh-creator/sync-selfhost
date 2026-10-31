@@ -729,7 +729,7 @@ export const Actions = {
           targetUserId = message.senderUserId;
         }
       }
-      if (!targetUserId || targetUserId === user.id) return { ok: false, error: "Choose another account or message to report." };
+      if (!targetUserId || targetUserId === user.id) return { ok: false, error: "You can't report yourself." };
       const existing = (await db.select({ id: schema.userReports.id }).from(schema.userReports).where(and(eq(schema.userReports.reporterUserId, user.id), eq(schema.userReports.targetUserId, targetUserId), eq(schema.userReports.reason, args.reason))).limit(1))[0];
       const createdAt = new Date();
       if (existing) {
