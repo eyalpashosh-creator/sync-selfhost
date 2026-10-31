@@ -8,6 +8,7 @@ import { drizzle } from "drizzle-orm/better-sqlite3";
 import express from "express";
 import helmet from "helmet";
 import { Actions } from "./actions.js";
+import { ADMIN_PAGE_HTML, getAdminStats } from "./admin.js";
 import * as schema from "./schema.js";
 import type { AuthenticatedUser, BlobStore, Ctx } from "./portable-sdk.js";
 
@@ -110,6 +111,26 @@ app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: { poli
 app.use(express.json({ limit: "5mb" }));
 
 app.get("/health", (_request, response) => response.json({ ok: true }));
+
+function adminAuthorized(request: express.Request): boolean {
+  const configured = process.env.ADMIN_KEY;
+  if (!configured) return false;
+  return request.header("x-admin-key") === configured;
+}
+
+app.get("/admin", (_request, response) => {
+  response.type("html").send(ADMIN_PAGE_HTML);
+});
+
+app.get("/admin/stats", (request, response) => {
+  if (!adminAuthorized(request)) return response.status(401).json({ error: "Unauthorized." });
+  try {
+    return response.json(getAdminStats(sqlite));
+  } catch (error) {
+    console.error("[admin] stats failed", error);
+    return response.status(500).json({ error: "Could not load stats." });
+  }
+});
 
 app.post("/actions", async (request, response) => {
   const body: unknown = request.body;
