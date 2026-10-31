@@ -8,7 +8,7 @@ import { drizzle } from "drizzle-orm/better-sqlite3";
 import express from "express";
 import helmet from "helmet";
 import { Actions } from "./actions.js";
-import { ADMIN_PAGE_HTML, getAdminStats } from "./admin.js";
+import { ADMIN_PAGE_HTML, deleteAdminUser, getAdminStats, listAdminCampaigns, listAdminReports, searchAdminUsers } from "./admin.js";
 import * as schema from "./schema.js";
 import type { AuthenticatedUser, BlobStore, Ctx } from "./portable-sdk.js";
 
@@ -129,6 +129,50 @@ app.get("/admin/stats", (request, response) => {
   } catch (error) {
     console.error("[admin] stats failed", error);
     return response.status(500).json({ error: "Could not load stats." });
+  }
+});
+
+app.get("/admin/users", (request, response) => {
+  if (!adminAuthorized(request)) return response.status(401).json({ error: "Unauthorized." });
+  try {
+    const q = typeof request.query.q === "string" ? request.query.q : "";
+    return response.json({ users: searchAdminUsers(sqlite, q) });
+  } catch (error) {
+    console.error("[admin] users failed", error);
+    return response.status(500).json({ error: "Could not load users." });
+  }
+});
+
+app.get("/admin/campaigns", (request, response) => {
+  if (!adminAuthorized(request)) return response.status(401).json({ error: "Unauthorized." });
+  try {
+    return response.json({ campaigns: listAdminCampaigns(sqlite) });
+  } catch (error) {
+    console.error("[admin] campaigns failed", error);
+    return response.status(500).json({ error: "Could not load campaigns." });
+  }
+});
+
+app.get("/admin/reports", (request, response) => {
+  if (!adminAuthorized(request)) return response.status(401).json({ error: "Unauthorized." });
+  try {
+    return response.json({ reports: listAdminReports(sqlite) });
+  } catch (error) {
+    console.error("[admin] reports failed", error);
+    return response.status(500).json({ error: "Could not load reports." });
+  }
+});
+
+app.post("/admin/users/:id/delete", (request, response) => {
+  if (!adminAuthorized(request)) return response.status(401).json({ error: "Unauthorized." });
+  try {
+    const id = Number(request.params.id);
+    if (!Number.isInteger(id) || id <= 0) return response.status(400).json({ error: "Invalid user." });
+    const ok = deleteAdminUser(sqlite, id);
+    return response.json({ ok });
+  } catch (error) {
+    console.error("[admin] delete user failed", error);
+    return response.status(500).json({ error: "Could not delete user." });
   }
 });
 
