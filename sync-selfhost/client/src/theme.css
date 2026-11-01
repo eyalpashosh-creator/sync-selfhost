@@ -1519,6 +1519,13 @@ body * {
 .hiw-steps .step-card:nth-child(3), .upgrade-plan-grid .upgrade-plan:nth-child(3), .curator-grid > *:nth-child(3), .value-grid .value-card:nth-child(3), .price-grid .price-card:nth-child(3) { animation-delay: .16s; }
 .hiw-steps .step-card:nth-child(4), .curator-grid > *:nth-child(4) { animation-delay: .24s; }
 
+@keyframes workspace-in { from { opacity: 0; transform: translateY(26px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Workspace modal: backdrop fades, panel glides up */
+.workspace-backdrop { animation: backdrop-in .22s ease both; }
+.workspace-modal { animation: workspace-in .38s cubic-bezier(.22,1,.36,1) both; }
+
 /* Popovers & panels pop in */
 .notification-panel, .curator-account-menu, .profile-menu, .dropdown-menu { animation: pop-in .22s cubic-bezier(.22,.9,.3,1.15) both; transform-origin: top right; }
 .curator-account-menu { transform-origin: bottom left; }
