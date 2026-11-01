@@ -820,8 +820,8 @@ footer { border-top: 1px solid var(--border); }
 .curator-wordmark .brand-mark { border-color: #a89f91; }
 .curator-wordmark .brand-mark i { background: var(--curator-red); }
 .curator-sidebar nav { margin-top: 58px; display: grid; gap: 6px; }
-.curator-sidebar nav button { min-height: 48px; padding: 0 14px; border: 0; border-radius: 14px; background: transparent; color: #646a61; text-align: left; display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; font-weight: 800; transition: background .18s ease, color .18s ease; }
-.curator-sidebar nav button:hover { background: rgba(0,0,0,.04); }
+.curator-sidebar nav button { min-height: 48px; padding: 0 14px; border: 0; border-radius: 14px; background: transparent; color: #646a61; text-align: left; display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; font-weight: 800; transition: background .32s cubic-bezier(.22,.8,.3,1), color .32s cubic-bezier(.22,.8,.3,1), transform .22s cubic-bezier(.22,.8,.3,1), padding-left .32s cubic-bezier(.22,.8,.3,1); }
+.curator-sidebar nav button:hover { background: rgba(0,0,0,.04); padding-left: 18px; }
 .curator-sidebar nav button.active { color: var(--curator-red); }
 .curator-sidebar nav button span { font-size: .65rem; }
 .curator-sidebar nav button b { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: var(--curator-red); color: white; font-size: .65rem; }
@@ -1097,7 +1097,7 @@ footer { border-top: 1px solid var(--border); }
 .curator-wordmark .brand-mark { border-color: rgba(168,85,247,.4); }
 .curator-wordmark .brand-mark i { background: var(--curator-accent); }
 .curator-sidebar nav button { color: #9d91a8; border-color: var(--curator-line); }
-.curator-sidebar nav button:hover { color: var(--curator-accent-soft); background: rgba(168,85,247,.05); }
+.curator-sidebar nav button:hover { color: var(--curator-accent-soft); background: rgba(168,85,247,.05); padding-left: 18px; }
 .curator-sidebar nav button.active { color: var(--curator-accent); background: rgba(168,85,247,.09); }
 .curator-sidebar nav button b { background: var(--curator-accent); color: #0b0710; }
 .curator-account { border-color: var(--curator-line); }
@@ -1529,11 +1529,10 @@ body * {
 /* Bell wiggle on hover when there are unread */
 .notification-bell:has(> span):hover { animation: bell-wiggle .45s ease; }
 
-/* Available dot gently pulses */
-.available-dot:not(.unavailable) { animation: pulse-dot 2.2s ease-in-out infinite; }
+/* Available dot: no pulse (removed per feedback) */
 
 /* Nav items: smooth active pill slide */
-.curator-sidebar nav button, .dash-nav button { transition: background .2s ease, color .2s ease, transform .15s ease; }
+.dash-nav button { transition: background .2s ease, color .2s ease, transform .15s ease; }
 .curator-sidebar nav button:active, .dash-nav button:active { transform: scale(.97); }
 
 /* Cards: deeper hover lift */
