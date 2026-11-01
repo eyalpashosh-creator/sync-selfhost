@@ -819,8 +819,9 @@ footer { border-top: 1px solid var(--border); }
 .curator-wordmark { border: 0; background: transparent; color: var(--curator-ink); display: flex; align-items: center; gap: 11px; font-size: .72rem; font-weight: 900; letter-spacing: .1em; }
 .curator-wordmark .brand-mark { border-color: #a89f91; }
 .curator-wordmark .brand-mark i { background: var(--curator-red); }
-.curator-sidebar nav { margin-top: 58px; display: grid; gap: 2px; }
-.curator-sidebar nav button { min-height: 48px; padding: 0 8px; border: 0; border-bottom: 1px solid var(--curator-line); background: transparent; color: #646a61; text-align: left; display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; font-weight: 800; }
+.curator-sidebar nav { margin-top: 58px; display: grid; gap: 6px; }
+.curator-sidebar nav button { min-height: 48px; padding: 0 14px; border: 0; border-radius: 14px; background: transparent; color: #646a61; text-align: left; display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; font-weight: 800; transition: background .18s ease, color .18s ease; }
+.curator-sidebar nav button:hover { background: rgba(0,0,0,.04); }
 .curator-sidebar nav button.active { color: var(--curator-red); }
 .curator-sidebar nav button span { font-size: .65rem; }
 .curator-sidebar nav button b { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: var(--curator-red); color: white; font-size: .65rem; }
@@ -1096,8 +1097,8 @@ footer { border-top: 1px solid var(--border); }
 .curator-wordmark .brand-mark { border-color: rgba(168,85,247,.4); }
 .curator-wordmark .brand-mark i { background: var(--curator-accent); }
 .curator-sidebar nav button { color: #9d91a8; border-color: var(--curator-line); }
-.curator-sidebar nav button:hover { color: var(--curator-accent-soft); }
-.curator-sidebar nav button.active { color: var(--curator-accent); background: rgba(168,85,247,.07); }
+.curator-sidebar nav button:hover { color: var(--curator-accent-soft); background: rgba(168,85,247,.05); }
+.curator-sidebar nav button.active { color: var(--curator-accent); background: rgba(168,85,247,.09); }
 .curator-sidebar nav button b { background: var(--curator-accent); color: #0b0710; }
 .curator-account { border-color: var(--curator-line); }
 .curator-account-toggle { color: var(--curator-ink); }
