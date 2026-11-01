@@ -905,13 +905,13 @@ footer { border-top: 1px solid var(--border); }
 
 /* Shared workspace */
 .workspace-backdrop { position: fixed; z-index: 100; inset: 0; background: rgba(5,7,8,.82); padding: 18px; display: grid; place-items: center; }
-.workspace-modal { width: min(1120px,100%); max-height: calc(100svh - 36px); overflow-y: auto; background: #111418; color: #f5f7f3; border: 1px solid rgba(255,255,255,.16); padding: 30px; position: relative; }
+.workspace-modal { width: min(1120px,100%); max-height: calc(100svh - 36px); overflow-y: auto; background: #111418; color: #f5f7f3; border: 1px solid rgba(255,255,255,.16); border-radius: 24px; padding: 30px; position: relative; }
 .workspace-close { position: absolute; right: 20px; top: 18px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.16); background: transparent; color: white; font-size: 1.5rem; }
 .workspace-modal > header { padding-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,.12); }
 .workspace-modal > header p { color: #b6ff3b; font-size: .7rem; font-weight: 900; letter-spacing: .12em; }
 .workspace-modal > header h1 { font-size: clamp(2.6rem,6vw,5.4rem); margin: 10px 0 16px; }
 .status-pill.resolve_pending, .invite-status.resolve_pending { color: #d8c7ff; background: rgba(168,85,247,.16); }
-.resolve-panel { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 20px; padding: 16px 18px; border: 1px solid rgba(182,255,59,.28); background: rgba(182,255,59,.045); }
+.resolve-panel { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 20px; padding: 16px 18px; border: 1px solid rgba(182,255,59,.28); border-radius: 18px; background: rgba(182,255,59,.045); }
 .resolve-panel.pending { border-color: rgba(168,85,247,.46); background: rgba(168,85,247,.08); }
 .resolve-panel.resolved { border-color: rgba(182,255,59,.32); }
 .resolve-panel strong, .resolve-panel p, .resolve-panel time { display: block; }
@@ -1161,7 +1161,7 @@ footer { border-top: 1px solid var(--border); }
 
 /* Collaboration spaces use both role colors without privileging either side. */
 .workspace-modal { border-color: rgba(168,85,247,.3); box-shadow: 0 30px 100px rgba(0,0,0,.6), 0 0 70px rgba(168,85,247,.06); }
-.workspace-modal::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, #b6ff3b, #a855f7); }
+.workspace-modal::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, #b6ff3b, #a855f7); border-radius: 24px 24px 0 0; }
 .workspace-modal :focus-visible { outline-color: #a855f7; }
 .workspace-modal > header { border-image: linear-gradient(90deg, rgba(182,255,59,.5), rgba(168,85,247,.5)) 1; }
 .workspace-modal > header p { color: #c4b5fd; }
