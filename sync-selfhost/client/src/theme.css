@@ -845,18 +845,18 @@ footer { border-top: 1px solid var(--border); }
 .curator-page-head h1 { max-width: 830px; font-family: Georgia,"Times New Roman",serif; font-weight: 500; font-size: clamp(3.2rem,7vw,7rem); line-height: .94; letter-spacing: -.055em; }
 .curator-page-head > span { color: #70766d; font-size: .82rem; }
 .curator-page-head.compact h1 { font-size: clamp(3rem,6vw,5.5rem); }
-.curator-ledger { display: grid; grid-template-columns: repeat(3,1fr); border-bottom: 1px solid var(--curator-line); }
-.curator-ledger > div { padding: 24px 20px 24px 0; }
-.curator-ledger > div + div { border-left: 1px solid var(--curator-line); padding-left: 24px; }
+.curator-ledger { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--curator-line); border-radius: 20px; background: rgba(255,255,255,.02); overflow: hidden; }
+.curator-ledger > div { padding: 24px 20px; }
+.curator-ledger > div + div { border-left: 1px solid var(--curator-line); }
 .curator-ledger strong, .curator-ledger span { display: block; }
 .curator-ledger strong { font-family: Georgia,serif; font-size: 2.5rem; font-weight: 400; }
 .curator-ledger span { color: #71776d; font-size: .76rem; margin-top: 4px; }
 .curator-overview-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 40px; margin-top: 50px; }
-.curator-feature { min-height: 330px; padding: 32px; background: var(--curator-red); color: white; display: flex; flex-direction: column; }
+.curator-feature { min-height: 330px; padding: 32px; background: var(--curator-red); color: white; display: flex; flex-direction: column; border-radius: 24px; }
 .curator-feature > p, .curator-incoming > div > p { font-size: .69rem; font-weight: 900; letter-spacing: .12em; }
 .curator-feature h2 { margin-top: 42px; font-family: Georgia,serif; font-weight: 400; font-size: clamp(2rem,4vw,3.5rem); }
 .curator-feature button { margin-top: auto; align-self: flex-start; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: white; padding: 8px 0; font-weight: 800; }
-.curator-incoming { padding-top: 10px; }
+.curator-incoming { padding: 20px; border: 1px solid var(--curator-line); border-radius: 20px; background: rgba(255,255,255,.02); }
 .curator-incoming > div:first-child { display: flex; justify-content: space-between; border-bottom: 2px solid var(--curator-ink); padding-bottom: 12px; }
 .curator-incoming button { border: 0; background: transparent; color: var(--curator-red); font-weight: 800; }
 .curator-incoming > div:not(:first-child) { padding: 18px 0; border-bottom: 1px solid var(--curator-line); }
