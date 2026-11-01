@@ -1490,3 +1490,59 @@ body * {
 }
 
 @media (max-width: 760px){.notification-panel{position:fixed;left:12px;right:12px;top:max(68px,calc(env(safe-area-inset-top) + 56px));width:auto;max-height:72vh}.curator-notification-wrap{right:16px;top:18px}.report-dialog{padding:22px 18px}.report-dialog fieldset{grid-template-columns:1fr}.workspace-safety{padding-right:34px}.workspace-safety button{font-size:10px}.curator-reviews article div{flex-wrap:wrap}.dash-topbar .notification-center{margin-left:auto}.dash-topbar .dash-spacer{display:none}}
+
+/* ============ Motion: micro-animations & transitions ============ */
+
+/* Keyframes */
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes pop-in { from { opacity: 0; transform: scale(.94) translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes badge-pop { 0% { transform: scale(.4); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+@keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 0 rgba(182,255,59,.45); } 50% { box-shadow: 0 0 0 6px rgba(182,255,59,0); } }
+@keyframes bell-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(12deg); } 75% { transform: rotate(-12deg); } }
+@keyframes shine-sweep { from { transform: translateX(-120%) skewX(-18deg); } to { transform: translateX(240%) skewX(-18deg); } }
+
+/* Buttons: tactile press + shine on primary */
+.button { transition: transform .15s ease, box-shadow .22s ease, background .18s ease; }
+.button:active { transform: scale(.96); }
+.button-primary { position: relative; overflow: hidden; }
+.button-primary::after { content: ""; position: absolute; top: 0; bottom: 0; width: 45%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent); transform: translateX(-120%) skewX(-18deg); pointer-events: none; }
+.button-primary:hover::after { animation: shine-sweep .7s ease; }
+
+/* View entrances: main content rises in on navigation */
+.dash-main > *, .curator-main > section, .curator-main > header, .account-panel { animation: rise-in .38s cubic-bezier(.22,.8,.3,1) both; }
+.curator-main > section:nth-child(2), .dash-main > *:nth-child(2) { animation-delay: .06s; }
+.curator-main > section:nth-child(3), .dash-main > *:nth-child(3) { animation-delay: .12s; }
+
+/* Staggered card entrances */
+.hiw-steps .step-card, .upgrade-plan-grid .upgrade-plan, .curator-grid > *, .value-grid .value-card, .price-grid .price-card { animation: rise-in .45s cubic-bezier(.22,.8,.3,1) both; }
+.hiw-steps .step-card:nth-child(2), .upgrade-plan-grid .upgrade-plan:nth-child(2), .curator-grid > *:nth-child(2), .value-grid .value-card:nth-child(2), .price-grid .price-card:nth-child(2) { animation-delay: .08s; }
+.hiw-steps .step-card:nth-child(3), .upgrade-plan-grid .upgrade-plan:nth-child(3), .curator-grid > *:nth-child(3), .value-grid .value-card:nth-child(3), .price-grid .price-card:nth-child(3) { animation-delay: .16s; }
+.hiw-steps .step-card:nth-child(4), .curator-grid > *:nth-child(4) { animation-delay: .24s; }
+
+/* Popovers & panels pop in */
+.notification-panel, .curator-account-menu, .profile-menu, .dropdown-menu { animation: pop-in .22s cubic-bezier(.22,.9,.3,1.15) both; transform-origin: top right; }
+.curator-account-menu { transform-origin: bottom left; }
+
+/* Notification badge springs in */
+.notification-bell > span { animation: badge-pop .35s cubic-bezier(.22,.9,.3,1.4) both; }
+
+/* Bell wiggle on hover when there are unread */
+.notification-bell:has(> span):hover { animation: bell-wiggle .45s ease; }
+
+/* Available dot gently pulses */
+.available-dot:not(.unavailable) { animation: pulse-dot 2.2s ease-in-out infinite; }
+
+/* Nav items: smooth active pill slide */
+.curator-sidebar nav button, .dash-nav button { transition: background .2s ease, color .2s ease, transform .15s ease; }
+.curator-sidebar nav button:active, .dash-nav button:active { transform: scale(.97); }
+
+/* Cards: deeper hover lift */
+.real-curator-card, .discovery-card, .upgrade-plan, .value-card, .price-card { transition: transform .25s cubic-bezier(.22,.8,.3,1), box-shadow .25s ease; }
+
+/* Inputs: soft focus bloom */
+input, textarea, select { transition: border-color .18s ease, box-shadow .18s ease; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
