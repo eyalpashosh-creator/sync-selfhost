@@ -748,7 +748,8 @@ footer { border-top: 1px solid var(--border); }
 .terms-line b { color: var(--dash-accent); font-size: .68rem; }
 .discovery-card > a { color: var(--dash-accent); font-weight: 800; font-size: .8rem; margin-top: 14px; }
 .social-links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 14px; }
-.social-links a { color: var(--dash-accent); font-weight: 800; font-size: .8rem; }
+.social-links a { color: var(--dash-accent); font-weight: 800; font-size: .8rem; padding: 8px 14px; border: 1px solid var(--dash-border); border-radius: 999px; text-decoration: none; transition: background .2s ease; }
+.social-links a:hover { background: rgba(182,255,59,.08); }
 .social-link-fields { display: grid; gap: 14px; }
 .social-link-fields h4 { margin: 4px 0 0; font-size: .95rem; }
 .discovery-card .invite-controls { margin-top: auto; padding-top: 22px; grid-template-columns: minmax(0,1fr) auto; }
