@@ -8,7 +8,7 @@ import { drizzle } from "drizzle-orm/better-sqlite3";
 import express from "express";
 import helmet from "helmet";
 import { Actions } from "./actions.js";
-import { ADMIN_PAGE_HTML, deleteAdminUser, getAdminStats, listAdminCampaigns, listAdminReports, searchAdminUsers } from "./admin.js";
+import { ADMIN_PAGE_HTML, deleteAdminUser, getAdminStats, listAdminCampaigns, listAdminFeedback, listAdminReports, searchAdminUsers } from "./admin.js";
 import * as schema from "./schema.js";
 import type { AuthenticatedUser, BlobStore, Ctx } from "./portable-sdk.js";
 
@@ -160,6 +160,16 @@ app.get("/admin/reports", (request, response) => {
   } catch (error) {
     console.error("[admin] reports failed", error);
     return response.status(500).json({ error: "Could not load reports." });
+  }
+});
+
+app.get("/admin/feedback", (request, response) => {
+  if (!adminAuthorized(request)) return response.status(401).json({ error: "Unauthorized." });
+  try {
+    return response.json({ feedback: listAdminFeedback(sqlite) });
+  } catch (error) {
+    console.error("[admin] feedback failed", error);
+    return response.status(500).json({ error: "Could not load feedback." });
   }
 });
 
