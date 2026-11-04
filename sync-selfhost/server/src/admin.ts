@@ -195,6 +195,21 @@ export function listAdminReports(db: StatsDb): AdminReportRow[] {
     .all() as AdminReportRow[];
 }
 
+export interface AdminFeedbackRow {
+  id: number;
+  username: string;
+  message: string;
+  createdAt: number;
+}
+
+export function listAdminFeedback(db: StatsDb): AdminFeedbackRow[] {
+  return db
+    .prepare(
+      "SELECT f.id, u.username, f.message, f.created_at AS createdAt FROM site_feedback f JOIN users u ON u.id = f.user_id ORDER BY f.created_at DESC LIMIT 50"
+    )
+    .all() as AdminFeedbackRow[];
+}
+
 export function deleteAdminUser(db: StatsDb, userId: number): boolean {
   const result = db.prepare("DELETE FROM users WHERE id = ?").run(userId) as {
     changes: number;
@@ -213,7 +228,7 @@ export const ADMIN_PAGE_HTML = `<!doctype html>
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
-header.top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+header.top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 header.top h1 { margin: 0; font-size: 26px; letter-spacing: -0.5px; }
 header.top h1 span { color: var(--green); }
 header.top p { margin: 4px 0 0; color: var(--dim); font-size: 13px; }
@@ -222,7 +237,10 @@ button { cursor: pointer; }
 .btn.ghost { background: transparent; color: var(--green); border: 1px solid var(--green-dim); }
 .btn.danger { background: transparent; color: var(--red); border: 1px solid #5c2323; padding: 6px 12px; font-size: 12px; border-radius: 6px; }
 .btn.small { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.nav { display: flex; gap: 6px; margin-bottom: 24px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+.nav button { background: transparent; border: 0; color: var(--dim); font-size: 15px; font-weight: 600; padding: 8px 16px; border-radius: 8px; }
+.nav button.active { color: var(--green); background: #1a2012; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
 .card strong { display: block; font-size: 28px; color: var(--green); }
 .card span { color: var(--dim); font-size: 13px; }
@@ -253,6 +271,7 @@ tr:last-child td { border-bottom: 0; }
 .searchrow { display: flex; gap: 10px; margin-bottom: 12px; }
 .searchrow input { flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-size: 14px; }
 .empty { color: var(--dim); font-size: 13px; padding: 12px 0; }
+.page[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -268,25 +287,47 @@ tr:last-child td { border-bottom: 0; }
     <div><h1>Sync <span>Analytics</span></h1><p id="updated"></p></div>
     <button class="btn ghost" id="refresh">Refresh</button>
   </header>
-  <div class="cards" id="cards"></div>
-  <section class="block">
-    <h2>Activity — last 30 days <span class="tabs" id="chart-tabs"></span></h2>
-    <div class="chart" id="chart"></div>
-  </section>
-  <section class="block">
-    <h2>Users</h2>
-    <div class="searchrow"><input id="user-q" placeholder="Search username or email…"><button class="btn small" id="user-search">Search</button></div>
-    <div style="overflow-x:auto"><table id="users"><thead><tr><th>Username</th><th>Role</th><th>Email</th><th>Signed up</th><th>Last seen</th><th></th></tr></thead><tbody></tbody></table></div>
-  </section>
-  <section class="block">
-    <h2>Campaigns</h2>
-    <div style="overflow-x:auto"><table id="campaigns"><thead><tr><th>Title</th><th>Owner</th><th>Status</th><th>Created</th></tr></thead><tbody></tbody></table></div>
-  </section>
-  <section class="block">
-    <h2>Reports</h2>
-    <div style="overflow-x:auto"><table id="reports"><thead><tr><th>Reporter</th><th>Target</th><th>Reason</th><th>Emailed</th><th>Date</th></tr></thead><tbody></tbody></table></div>
-  </section>
-  <section class="block"><h2>Totals</h2><div class="statusline" id="activity"></div></section>
+  <nav class="nav" id="main-nav">
+    <button data-page="overview" class="active">Overview</button>
+    <button data-page="users">Users</button>
+    <button data-page="campaigns">Campaigns</button>
+    <button data-page="reports">Reports</button>
+  </nav>
+
+  <div class="page" id="page-overview">
+    <div class="cards" id="cards"></div>
+    <section class="block">
+      <h2>Activity — last 30 days <span class="tabs" id="chart-tabs"></span></h2>
+      <div class="chart" id="chart"></div>
+    </section>
+    <section class="block"><h2>Totals</h2><div class="statusline" id="activity"></div></section>
+  </div>
+
+  <div class="page" id="page-users" hidden>
+    <section class="block">
+      <h2>Users</h2>
+      <div class="searchrow"><input id="user-q" placeholder="Search username or email…"><button class="btn small" id="user-search">Search</button></div>
+      <div style="overflow-x:auto"><table id="users"><thead><tr><th>Username</th><th>Role</th><th>Email</th><th>Signed up</th><th>Last seen</th><th></th></tr></thead><tbody></tbody></table></div>
+    </section>
+  </div>
+
+  <div class="page" id="page-campaigns" hidden>
+    <section class="block">
+      <h2>Campaigns</h2>
+      <div style="overflow-x:auto"><table id="campaigns"><thead><tr><th>Title</th><th>Owner</th><th>Status</th><th>Created</th></tr></thead><tbody></tbody></table></div>
+    </section>
+  </div>
+
+  <div class="page" id="page-reports" hidden>
+    <section class="block">
+      <h2>Reports</h2>
+      <div style="overflow-x:auto"><table id="reports"><thead><tr><th>Reporter</th><th>Target</th><th>Reason</th><th>Emailed</th><th>Date</th></tr></thead><tbody></tbody></table></div>
+    </section>
+    <section class="block">
+      <h2>Site feedback</h2>
+      <div style="overflow-x:auto"><table id="feedback"><thead><tr><th>From</th><th>Message</th><th>Date</th></tr></thead><tbody></tbody></table></div>
+    </section>
+  </div>
 </div>
 <script>
 (function () {
@@ -304,6 +345,14 @@ tr:last-child td { border-bottom: 0; }
     if (res.status === 401) { gate.hidden = false; dash.hidden = true; err.textContent = key() ? 'Wrong key.' : ''; throw new Error('unauthorized'); }
     if (!res.ok) throw new Error('request failed');
     return res.json();
+  }
+  function showPage(name) {
+    Array.prototype.forEach.call(document.querySelectorAll('#main-nav button'), function (b) {
+      b.classList.toggle('active', b.getAttribute('data-page') === name);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.page'), function (p) {
+      p.hidden = p.id !== 'page-' + name;
+    });
   }
   async function load() {
     try {
@@ -383,6 +432,10 @@ tr:last-child td { border-bottom: 0; }
     document.querySelector('#reports tbody').innerHTML = data.reports.map(function (r) {
       return '<tr><td>@' + esc(r.reporter) + '</td><td>@' + esc(r.target) + '</td><td>' + esc(r.reason) + '</td><td>' + (r.emailed ? 'yes' : 'no') + '</td><td>' + fmtDate(r.createdAt) + '</td></tr>';
     }).join('') || '<tr><td colspan="5" class="empty">No reports.</td></tr>';
+    var fb = await api('/admin/feedback');
+    document.querySelector('#feedback tbody').innerHTML = fb.feedback.map(function (f) {
+      return '<tr><td>@' + esc(f.username) + '</td><td>' + esc(f.message) + '</td><td>' + fmtDate(f.createdAt) + '</td></tr>';
+    }).join('') || '<tr><td colspan="3" class="empty">No feedback yet.</td></tr>';
   }
   document.getElementById('unlock').addEventListener('click', function () {
     sessionStorage.setItem('sync_admin_key', document.getElementById('key').value);
@@ -392,6 +445,9 @@ tr:last-child td { border-bottom: 0; }
   document.getElementById('refresh').addEventListener('click', load);
   document.getElementById('user-search').addEventListener('click', loadUsers);
   document.getElementById('user-q').addEventListener('keydown', function (e) { if (e.key === 'Enter') loadUsers(); });
+  Array.prototype.forEach.call(document.querySelectorAll('#main-nav button'), function (b) {
+    b.addEventListener('click', function () { showPage(b.getAttribute('data-page')); });
+  });
   if (key()) load();
 })();
 </script>
