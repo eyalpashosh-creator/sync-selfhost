@@ -177,7 +177,7 @@ const FAQ_ITEMS: Array<{ question: string; answer: ReactNode }> = [
   },
   {
     question: "How will collaboration payments work?",
-    answer: <>When payments launch, the artist will pay at the start of the collaboration. Sync will hold the funds and release them to the curator when the collaboration is completed after the curator has submitted the live post link, minus Sync's 5% commission. Checkout is not available yet, so no collaboration charge can be started today.</>,
+    answer: <>When payments launch, the artist will pay at the start of the collaboration. Sync will hold the funds and release them to the curator when the collaboration is completed after the curator has submitted the live post link, minus Sync's 10% commission. Checkout is not available yet, so no collaboration charge can be started today.</>,
   },
   {
     question: "What happens if the video is never posted?",
@@ -220,7 +220,7 @@ function MarketingPricing({ onCuratorAccess }: { onCuratorAccess: () => void }) 
       <PriceCard popular name="Growth" description="Get seen more often as your work grows." price="$14" features={["Priority discovery placement", "More monthly invites", "Basic profile analytics"]} actionLabel={"Choose\nGrowth"} onChoose={onCuratorAccess} />
       <PriceCard name="Professional" description="Run a high-volume curator business." price="$49" features={["Featured placement", "Unlimited invites", "Verified badge", "Advanced analytics"]} actionLabel={"Choose\nProfessional"} onChoose={onCuratorAccess} />
     </div>
-    <div className="container pricing-fine-print"><strong>5% commission on paid collaborations</strong><p>Curator subscriptions and collaboration earnings are separate. When artist-to-curator payments launch, Sync will retain 5% of each paid collaboration. Paid plan checkout is not available yet.</p><p>Paid subscriptions will renew monthly. Cancel anytime; no refunds; all sales are final, except where applicable law requires otherwise.</p></div>
+    <div className="container pricing-fine-print"><strong>10% commission on paid collaborations</strong><p>Curator subscriptions and collaboration earnings are separate. When artist-to-curator payments launch, Sync will retain 10% of each paid collaboration. Paid plan checkout is not available yet.</p><p>Paid subscriptions will renew monthly. Cancel anytime; no refunds; all sales are final, except where applicable law requires otherwise.</p></div>
     <section className="container pricing-faq"><p className="eyebrow">Quick answer</p><h2>Do artists pay anything?</h2><p><strong>No subscription—ever.</strong> Artists use Sync for free. When collaboration payments launch, artists will still pay the curator's agreed video price.</p><button className="button button-primary" onClick={onCuratorAccess}>Continue as a curator <Arrow /></button></section>
   </section>;
 }
@@ -237,7 +237,7 @@ function CuratorUpgrade() {
       <article className="upgrade-plan"><div className="upgrade-plan-head"><span>PROFESSIONAL</span></div><div className="upgrade-price"><strong>$49</strong><span>/ month</span></div><ul><li><Check />Featured placement</li><li><Check />Unlimited accepted invites</li><li><Check />Verified badge</li><li><Check />Advanced analytics</li></ul><button onClick={() => choosePaid("Professional")}>{"Choose\nProfessional"}</button></article>
     </div>
     {paymentNotice && <div className="payment-coming-soon" role="status"><strong>Payments coming soon</strong><p>{paymentNotice}</p></div>}
-    <div className="upgrade-terms"><strong>5% commission on paid collaborations</strong><p>When artist-to-curator payments launch, Sync will retain 5% from every paid collaboration. Your subscription does not replace that commission.</p><p>Paid subscriptions will renew monthly. Cancel anytime; no refunds; all sales are final, except where applicable law requires otherwise.</p></div>
+    <div className="upgrade-terms"><strong>10% commission on paid collaborations</strong><p>When artist-to-curator payments launch, Sync will retain 10% from every paid collaboration. Your subscription does not replace that commission.</p><p>Paid subscriptions will renew monthly. Cancel anytime; no refunds; all sales are final, except where applicable law requires otherwise.</p></div>
   </section>;
 }
 
