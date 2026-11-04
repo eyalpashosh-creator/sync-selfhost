@@ -110,19 +110,40 @@ app.disable("x-powered-by");
 // Optional site-wide password gate (for staging). Set SITE_PASSWORD on the
 // staging service only; production leaves it unset and stays public.
 const sitePassword = process.env.SITE_PASSWORD;
+const STAGING_COOKIE = "sync_staging_session";
+function stagingSessionToken(): string {
+  return crypto.createHmac("sha256", sitePassword ?? "").update("staging-session-v1").digest("hex");
+}
+function hasStagingSession(request: express.Request): boolean {
+  if (!sitePassword) return true;
+  const cookies = (request.header("cookie") ?? "").split(";").map((c) => c.trim());
+  const session = cookies.find((c) => c.startsWith(`${STAGING_COOKIE}=`))?.slice(STAGING_COOKIE.length + 1) ?? "";
+  const expected = stagingSessionToken();
+  if (session.length !== expected.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(session), Buffer.from(expected));
+}
+const STAGING_LOGIN_HTML = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sync Staging</title><style>
+*{box-sizing:border-box;margin:0;padding:0}body{background:#0a0c0e;color:#e8eaed;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;display:grid;place-items:center;padding:20px}
+.card{background:#121518;border:1px solid #23282e;border-radius:16px;padding:40px 36px;width:100%;max-width:400px;text-align:center}
+h1{font-size:1.5rem;margin-bottom:8px}p{color:#8a919c;font-size:.9rem;margin-bottom:28px}
+input{width:100%;background:#0a0c0e;border:1px solid #2a3038;border-radius:10px;color:#e8eaed;font-size:1rem;padding:14px 16px;margin-bottom:12px;outline:none}
+input:focus{border-color:#b8e62e}button{width:100%;background:#b8e62e;color:#0a0c0e;border:none;border-radius:10px;font-size:1rem;font-weight:700;padding:14px;cursor:pointer}
+button:hover{background:#c9f04a}.error{color:#ff7a7a;font-size:.85rem;margin-bottom:12px;min-height:1.2em}
+</style></head><body><div class="card"><h1>Sync Staging</h1><p>Private test site. Enter the password.</p><form method="POST" action="/staging-login"><div class="error">__ERROR__</div><input type="password" name="password" placeholder="Password" autocomplete="off" autofocus><button type="submit">Open test site</button></form></div></body></html>`;
 if (sitePassword) {
-  app.use((request, response, next) => {
-    const header = request.header("authorization") ?? "";
-    const [scheme, encoded] = header.split(" ");
-    let ok = false;
-    if (scheme === "Basic" && encoded) {
-      const decoded = Buffer.from(encoded, "base64").toString("utf8");
-      const sep = decoded.indexOf(":");
-      ok = sep >= 0 && decoded.slice(sep + 1) === sitePassword;
+  app.use(express.urlencoded({ extended: false }));
+  app.post("/staging-login", (request, response) => {
+    if (request.body?.password === sitePassword) {
+      // Session cookie, no expiry: dies when the browser closes, so it asks again next time.
+      response.cookie(STAGING_COOKIE, stagingSessionToken(), { httpOnly: true, sameSite: "lax", secure: true, path: "/" });
+      return response.redirect("/");
     }
-    if (ok) return next();
-    response.set("WWW-Authenticate", 'Basic realm="Staging"');
-    return response.status(401).send("This staging site is password protected.");
+    return response.type("html").status(401).send(STAGING_LOGIN_HTML.replace("__ERROR__", "Wrong password. Try again."));
+  });
+  app.use((request, response, next) => {
+    if (request.path === "/staging-login") return next();
+    if (hasStagingSession(request)) return next();
+    return response.type("html").status(401).send(STAGING_LOGIN_HTML.replace("__ERROR__", ""));
   });
 }
 app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: { policy: "same-origin" } }));
@@ -241,9 +262,16 @@ app.get("/files/*path", async (request, response) => {
 });
 
 app.use(express.static(clientDir, { index: false, maxAge: "1h" }));
+// HIDE_TESTING_FEATURES=1 strips testing affordances (role switcher, workspace
+// preview-as) on production. Staging leaves it unset to keep them.
+const hideTestingFeatures = process.env.HIDE_TESTING_FEATURES === "1";
 app.use(async (request, response, next) => {
   if (request.method !== "GET") return next();
-  try { return response.sendFile(path.join(clientDir, "index.html")); }
+  try {
+    const html = await fs.readFile(path.join(clientDir, "index.html"), "utf8");
+    const injected = html.replace("</head>", `<script>window.SYNC_CONFIG=${JSON.stringify({ hideTestingFeatures })};</script></head>`);
+    return response.type("html").send(injected);
+  }
   catch (error) { return next(error); }
 });
 
