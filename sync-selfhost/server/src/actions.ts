@@ -756,6 +756,17 @@ export const Actions = {
       ctx.invalidateQueries(); return { ok: true, duplicate: false };
     }
   }),
+  submitFeedback: defineAction({
+    request: z.object({ sessionToken: z.string(), message: z.string().trim().min(1).max(2000) }),
+    response: z.object({ ok: z.boolean(), error: z.string().optional() }),
+    async handler(ctx, args) {
+      const user = await authUser(ctx, args.sessionToken); if (!user) return { ok: false, error: "Your session expired." };
+      const db = ctx.db<typeof schema>();
+      const inserted = await db.insert(schema.siteFeedback).values({ userId: user.id, message: args.message.trim(), createdAt: new Date() }).returning({ id: schema.siteFeedback.id });
+      if (!inserted[0]) return { ok: false, error: "Your feedback couldn't be sent." };
+      ctx.invalidateQueries(); return { ok: true };
+    }
+  }),
   blockUser: defineAction({
     request: z.object({ sessionToken: z.string(), curatorProfileId: z.number().int().positive().optional(), inviteId: z.number().int().positive().optional() }),
     response: z.object({ ok: z.boolean(), error: z.string().optional() }),
