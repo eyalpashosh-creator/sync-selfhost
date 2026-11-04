@@ -157,6 +157,13 @@ export const userReports = sqliteTable("user_reports", {
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 }, (table) => [uniqueIndex("user_reports_reporter_target_reason_idx").on(table.reporterUserId, table.targetUserId, table.reason), index("user_reports_target_idx").on(table.targetUserId), index("user_reports_emailed_created_idx").on(table.emailed, table.createdAt)]);
 
+export const siteFeedback = sqliteTable("site_feedback", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  message: text("message").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+}, (table) => [index("site_feedback_user_idx").on(table.userId), index("site_feedback_created_idx").on(table.createdAt)]);
+
 export const collaborationTimelineEvents = sqliteTable("collaboration_timeline_events", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   inviteId: integer("invite_id").notNull().references(() => collaborations.id, { onDelete: "cascade" }),
