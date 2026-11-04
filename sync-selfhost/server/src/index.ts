@@ -107,6 +107,24 @@ async function createContext(args: unknown): Promise<Ctx> {
 
 const app = express();
 app.disable("x-powered-by");
+// Optional site-wide password gate (for staging). Set SITE_PASSWORD on the
+// staging service only; production leaves it unset and stays public.
+const sitePassword = process.env.SITE_PASSWORD;
+if (sitePassword) {
+  app.use((request, response, next) => {
+    const header = request.header("authorization") ?? "";
+    const [scheme, encoded] = header.split(" ");
+    let ok = false;
+    if (scheme === "Basic" && encoded) {
+      const decoded = Buffer.from(encoded, "base64").toString("utf8");
+      const sep = decoded.indexOf(":");
+      ok = sep >= 0 && decoded.slice(sep + 1) === sitePassword;
+    }
+    if (ok) return next();
+    response.set("WWW-Authenticate", 'Basic realm="Staging"');
+    return response.status(401).send("This staging site is password protected.");
+  });
+}
 app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: { policy: "same-origin" } }));
 app.use(express.json({ limit: "5mb" }));
 
