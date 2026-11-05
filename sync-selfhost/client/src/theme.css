@@ -204,6 +204,7 @@ p { margin: 0; }
 .auth-divider::before, .auth-divider::after { content: ""; height: 1px; background: var(--border); }
 .auth-status { color: var(--dim); min-height: 43px; margin-top: 16px; font-size: .82rem; text-align: center; }
 .auth-status.busy { color: var(--soft); }
+.auth-error { margin-top: 16px; text-align: center; }
 details { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
 summary { color: var(--soft); cursor: pointer; font-size: .83rem; font-weight: 800; }
 details p { margin-top: 13px; color: var(--dim); font-size: .78rem; }
