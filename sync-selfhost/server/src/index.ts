@@ -171,6 +171,25 @@ app.get("/admin/stats", (request, response) => {
   }
 });
 
+app.get("/admin/backup", (request, response) => {
+  if (!adminAuthorized(request)) return response.status(401).json({ error: "Unauthorized." });
+  const stamp = new Date().toISOString().slice(0, 10);
+  const tmpPath = path.join(dataDir, `sync-backup-${stamp}.sqlite`);
+  try {
+    // VACUUM INTO produces a consistent snapshot even while the DB is live.
+    sqlite.prepare(`VACUUM INTO ?`).run(tmpPath);
+    const filename = `sync-backup-${stamp}.sqlite`;
+    response.download(tmpPath, filename, (error) => {
+      fsSync.unlink(tmpPath, () => undefined);
+      if (error) console.error("[admin] backup download failed", error);
+    });
+  } catch (error) {
+    console.error("[admin] backup failed", error);
+    fsSync.unlink(tmpPath, () => undefined);
+    return response.status(500).json({ error: "Backup could not be created." });
+  }
+});
+
 app.get("/admin/users", (request, response) => {
   if (!adminAuthorized(request)) return response.status(401).json({ error: "Unauthorized." });
   try {
