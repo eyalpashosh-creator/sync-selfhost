@@ -58,6 +58,12 @@ export const passwordResetRateLimits = sqliteTable("password_reset_rate_limits",
   requestCount: integer("request_count").notNull().default(1),
 });
 
+export const signInRateLimits = sqliteTable("sign_in_rate_limits", {
+  email: text("email").primaryKey(),
+  windowStartedAt: integer("window_started_at", { mode: "timestamp_ms" }).notNull(),
+  failedCount: integer("failed_count").notNull().default(1),
+});
+
 export const campaigns = sqliteTable("campaigns", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
