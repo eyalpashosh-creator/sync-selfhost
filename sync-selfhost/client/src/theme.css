@@ -195,6 +195,8 @@ p { margin: 0; }
 .email-auth-form label > span { display: block; color: var(--soft); font-size: .78rem; font-weight: 800; margin-bottom: 7px; }
 .email-auth-form input { width: 100%; min-height: 47px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg); color: var(--text); padding: 0 13px; outline: none; }
 .email-auth-form input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); }
+.email-auth-form input.input-error { border-color: #e5484d; box-shadow: 0 0 0 3px rgba(229, 72, 77, .18); }
+.email-auth-form input.input-error:focus { border-color: #e5484d; box-shadow: 0 0 0 3px rgba(229, 72, 77, .18); }
 .email-auth-form input::placeholder { color: var(--dim); }
 .email-auth-form .button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 .auth-mode-switch { width: 100%; margin-top: 17px; border: 0; background: transparent; color: var(--accent); font-size: .84rem; font-weight: 800; text-align: center; }
@@ -204,7 +206,6 @@ p { margin: 0; }
 .auth-divider::before, .auth-divider::after { content: ""; height: 1px; background: var(--border); }
 .auth-status { color: var(--dim); min-height: 43px; margin-top: 16px; font-size: .82rem; text-align: center; }
 .auth-status.busy { color: var(--soft); }
-.auth-error { margin-top: 16px; text-align: center; }
 details { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
 summary { color: var(--soft); cursor: pointer; font-size: .83rem; font-weight: 800; }
 details p { margin-top: 13px; color: var(--dim); font-size: .78rem; }
